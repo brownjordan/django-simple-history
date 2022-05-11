@@ -536,6 +536,8 @@ class HistoricalRecords:
         return meta_fields
 
     def post_save(self, instance, created, using=None, **kwargs):
+        if not created and (not hasattr(instance, "save_history") or not instance.save_history):
+            return
         if not getattr(settings, "SIMPLE_HISTORY_ENABLED", True):
             return
         if not created and hasattr(instance, "skip_history_when_saving"):
